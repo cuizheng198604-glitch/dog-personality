@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>狗品种性格测试 - 结果</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#1a1008;--panel:#2d1a0a;--card:#3d2510;--border:#5a3a1a;--text:#f5e8d0;--muted:#a08060;--dim:#c0a080;--primary:#f59e0b;--accent:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;outline:none}
+body{font-family:Segoe UI,PingFang SC,Microsoft YaHei,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+.result-screen{max-width:700px;margin:0 auto;padding:1.5rem}
+
+.result-hero{background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:2rem;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden;animation:fadeUp 0.6s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.result-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(245,158,11,0.12),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-block;padding:0.3rem 1rem;border-radius:20px;font-size:0.7rem;font-weight:700;margin-bottom:1.2rem;letter-spacing:0.05em}
+.hero-dog{font-size:5rem;margin-bottom:0.5rem;animation:bounceIn 0.8s ease-out}
+@keyframes bounceIn{0%{transform:scale(0.3);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.hero-name{font-size:2.5rem;font-weight:900;background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.3rem}
+.hero-rarity{margin-bottom:1rem}
+.hero-rarity .stars{font-size:1.1rem;letter-spacing:2px}
+.hero-match{font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem}
+.hero-traits{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem}
+.trait-tag{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.25rem 0.7rem;font-size:0.72rem;color:var(--dim)}
+.hero-desc{font-size:0.88rem;color:var(--dim);line-height:1.9;max-width:480px;margin:0 auto;text-align:left}
+
+.detail-section{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.2rem}
+.section-title{font-size:0.72rem;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
+.detail-row{display:flex;gap:0.8rem;margin-bottom:0.8rem;align-items:flex-start}
+.detail-row:last-child{margin-bottom:0}
+.detail-icon{font-size:1.2rem;flex-shrink:0;margin-top:0.1rem}
+.detail-content{flex:1}
+.detail-label{font-size:0.72rem;color:var(--muted);margin-bottom:0.2rem}
+.detail-text{font-size:0.88rem;color:var(--dim);line-height:1.7}
+
+.match-section{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.2rem}
+.match-grid{display:flex;gap:0.8rem;flex-wrap:wrap;margin-top:1rem}
+.match-item{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.8rem;text-align:center}
+.match-emoji{font-size:1.8rem;margin-bottom:0.3rem}
+.match-label{font-size:0.68rem;color:var(--muted)}
+.match-name{font-size:0.82rem;font-weight:700;color:var(--text);margin-top:0.2rem}
+
+.share-section{padding:1.5rem 0}
+.share-card-wrap{text-align:center;padding:1rem 0}
+.share-card{border-radius:18px;overflow:hidden;max-width:360px;margin:0 auto 1rem;box-shadow:0 8px 40px rgba(0,0,0,0.5);cursor:pointer;transition:transform 0.2s}
+.share-card:hover{transform:scale(1.02)}
+.sc-bg{min-height:500px;padding:1.5rem;display:flex;flex-direction:column;justify-content:space-between}
+.sc-overlay{min-height:500px;display:flex;flex-direction:column;justify-content:space-between}
+.sc-top{display:flex;justify-content:space-between;align-items:flex-start}
+.sc-badge{display:inline-block;padding:0.25rem 0.6rem;border-radius:12px;font-size:0.65rem;font-weight:700}
+.sc-dog{font-size:3.5rem;text-align:center;padding:1rem 0}
+.sc-name{font-size:1.8rem;font-weight:900;text-align:center;margin-bottom:0.3rem}
+.sc-rarity{text-align:center;margin-bottom:1rem}
+.sc-stars{letter-spacing:3px;font-size:0.9rem}
+.sc-match{font-size:0.8rem;text-align:center;margin-bottom:1rem}
+.sc-traits{display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem}
+.sc-trait{background:rgba(255,255,255,0.08);border-radius:12px;padding:0.2rem 0.5rem;font-size:0.65rem;color:rgba(255,255,255,0.7)}
+.sc-desc{font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.7;text-align:left;flex:1;padding:0 0.3rem}
+.sc-url{text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.7);padding:0.5rem 0.3rem;background:rgba(0,0,0,0.2);border-radius:8px;margin:0.5rem 0.3rem;letter-spacing:0.02em;word-break:break-all}
+.sc-footer{text-align:center;font-size:0.65rem;color:rgba(255,255,255,0.35);padding-top:0.4rem}
+.share-actions{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:0.8rem}
+.share-btn{padding:0.6rem 1.4rem;border-radius:10px;border:none;font-size:0.85rem;cursor:pointer;font-weight:600;transition:opacity 0.2s}
+.share-btn:hover{opacity:0.85}
+.share-btn.save{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1008}
+.share-btn.wechat{background:#07c160;color:#fff}
+.share-btn.qr{background:var(--card);border:1px solid var(--border);color:var(--dim)}
+.share-qr-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:1rem}
+.share-qr-modal.show{display:flex}
+.qr-box{background:var(--panel);border-radius:16px;padding:2rem;text-align:center;border:1px solid var(--border)}
+.qr-box p{margin:1rem 0 0;color:var(--muted);font-size:0.82rem}
+.qr-box button{margin-top:1rem;padding:0.5rem 1.5rem;background:#f59e0b;border:none;border-radius:8px;color:#1a1008;font-weight:700;cursor:pointer}
+
+.ad-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem}
+.ad-overlay.show{display:flex}
+.ad-overlay-box{background:#13132a;border:1px solid #2d2d4a;border-radius:16px;padding:2rem;text-align:center;position:relative;max-width:360px;width:90%}
+.ad-overlay-close{position:absolute;top:0.8rem;right:0.8rem;background:none;border:none;color:#64748b;font-size:1rem;cursor:pointer;padding:0.2rem 0.5rem}
+.ad-overlay-close:hover{color:#fff}
+.ad-overlay-title{font-size:0.9rem;font-weight:700;color:#e8edf5;margin-bottom:0.5rem}
+.ad-overlay-desc{font-size:0.78rem;color:#5a7a9a;margin-bottom:1rem}
+.ad-overlay-qr{background:#fff;border-radius:8px;padding:0.8rem;display:inline-block}
+.ad-overlay-btn{display:block;width:100%;padding:0.7rem;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:none;border-radius:10px;color:#1a1008;font-size:0.9rem;font-weight:700;cursor:pointer;margin-top:1rem}
+.ad-overlay-note{font-size:0.7rem;color:#5a7a9a;margin-top:0.8rem}
+.ad-overlay-url{background:#1a1a2e;border:1px solid #3b82f6;border-radius:8px;padding:0.6rem 0.8rem;font-size:0.78rem;color:#60a5fa;word-break:break-all;cursor:pointer;text-align:center;margin:0.5rem 0}
+
+.result-ad{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:0.8rem}
+.result-ad-label{background:rgba(245,158,11,0.1);color:var(--primary);padding:0.2rem 0.5rem;border-radius:6px;font-size:0.65rem;font-weight:700;flex-shrink:0}
+.result-ad-inner{flex:1;display:flex;align-items:center;gap:0.8rem}
+.result-ad-text{font-size:0.82rem;color:var(--dim);flex:1}
+.result-ad-btn{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1008;padding:0.4rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+.traffic-section{background:linear-gradient(135deg,#2d1a0a,#3d2510);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin:1.5rem auto;max-width:500px;text-align:center}
+.traffic-header{display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1rem}
+.traffic-icon{font-size:1.4rem}
+.traffic-title{font-size:1rem;font-weight:800;color:var(--text)}
+.traffic-entries{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1rem}
+.traffic-entry{display:flex;align-items:center;gap:0.8rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.8rem;text-align:left}
+.entry-icon{font-size:1.8rem;flex-shrink:0}
+.entry-info{flex:1}
+.entry-title{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:0.15rem}
+.entry-desc{font-size:0.72rem;color:var(--muted)}
+.traffic-benefit{border-top:1px solid var(--border);padding-top:1rem}
+.benefit-item{font-size:0.78rem;color:var(--muted);margin-bottom:0.3rem;text-align:left}
+
+.others-section{margin:1.5rem 0}
+.others-title{font-size:0.72rem;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;text-align:center}
+.others-grid{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+.other-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:1rem;text-align:center;min-width:120px;flex:1;max-width:160px}
+.other-emoji{font-size:2rem;margin-bottom:0.3rem}
+.other-name{font-size:0.88rem;font-weight:700;color:var(--text)}
+.other-rarity{font-size:0.65rem;color:var(--muted)}
+
+.bf-section{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.2rem}
+.bf-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem}
+.bf-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.8rem}
+.bf-label{font-size:0.7rem;color:var(--muted);margin-bottom:0.3rem;display:flex;justify-content:space-between}
+.bf-value{font-size:0.9rem;font-weight:700;color:var(--primary)}
+.bf-bar{height:4px;background:var(--border);border-radius:2px;margin-top:0.4rem;overflow:hidden}
+.bf-fill{height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:2px;transition:width 1s}
+.bf-names{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem}
+
+.disclaimer{font-size:0.72rem;color:var(--muted);text-align:center;line-height:1.8;padding:1rem 0;max-width:480px;margin:0 auto}
+.ad-container{margin:1.5rem auto;max-width:700px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="result-screen" id="resultScreen"></div>
+
+<div class="share-qr-modal" id="shareQRModal">
+  <div class="qr-box">
+    <canvas id="qrCanvas"></canvas>
+    <p>截图保存，发给朋友测试</p>
+    <button onclick="hideQR()">关闭</button>
+  </div>
+</div>
+
+<script src="dog_config.js"></script>
+
+<script>
+function getResultFromURL() {
+  try {
+    var stored = sessionStorage.getItem('dog_result');
+    if (stored) {
+      sessionStorage.removeItem('dog_result');
+      return JSON.parse(stored);
+    }
+  } catch(e) {}
+
+  var params = new URLSearchParams(window.location.search);
+  var encoded = params.get('r');
+  if (encoded) {
+    try { return JSON.parse(atob(encoded)); } catch(e) {}
+  }
+
+  try {
+    var last = localStorage.getItem('dog_last_result');
+    if (last) return JSON.parse(last);
+  } catch(e) {}
+
+  return getDefaultResult();
+}
+
+function getDefaultResult() {
+  const dog = cfg.dogs[0];
+  return {
+    dogId: dog.id,
+    dog: dog,
+    matchPercent: 87,
+    rarity: cfg.rarities[dog.rarity],
+    bfScores: { Openness: 75, Conscientiousness: 80, Extraversion: 40, Agreeableness: 60, Neuroticism: 25 },
+    secondDog: cfg.dogs[1],
+    thirdDog: cfg.dogs[2]
+  };
+}
+
+var cfg = window.DOG_CONFIG || { dogs: [{id:'golden',name:'金毛',emoji:'☀️',rarity:'epic',traits:['温暖','友善'],description:'金毛',strength:'温暖友善',weakness:'有时讨好',bestMatch:[],worstMatch:[],profile:{Openness:55,Conscientiousness:65,Extraversion:90,Agreeableness:95,Neuroticism:25}}], rarities: { common:{name:'普通',stars:2,color:'#888'}, rare:{name:'稀有',stars:3,color:'#3b82f6'}, epic:{name:'史诗',stars:4,color:'#8b5cf6'}, legendary:{name:'传说',stars:5,color:'#f59e0b'} }, share:{quizUrl:'https://www.fbti.net'}, ads:{enabled:false} };
+
+function renderResult(result) {
+  const { dog, matchPercent, rarity, secondDog, thirdDog, bfScores } = result;
+  const screen = document.getElementById('resultScreen');
+
+  const stars = '★'.repeat(rarity.stars) + '☆'.repeat(5 - rarity.stars);
+
+  const BF_LABELS = {
+    Openness:'开放性',
+    Conscientiousness:'尽责性',
+    Extraversion:'外向性',
+    Agreeableness:'宜人性',
+    Neuroticism:'神经质性'
+  };
+
+  const bfBars = Object.entries(bfScores || {}).map(([dim, val]) => `
+    <div class="bf-item">
+      <div class="bf-label"><span>${BF_LABELS[dim] || dim}</span><span class="bf-value">${val}%</span></div>
+      <div class="bf-bar"><div class="bf-fill" style="width:${val}%"></div></div>
+    </div>
+  `).join('');
+
+  const bfDesc = Object.entries(bfScores || {}).map(([dim, val]) => {
+    let label = '';
+    if (dim === 'Neuroticism') label = val > 60 ? '高神经质' : val > 40 ? '中等' : '情绪稳定';
+    else if (dim === 'Openness') label = val > 60 ? '高开放' : val > 40 ? '中等' : '传统务实';
+    else if (dim === 'Conscientiousness') label = val > 60 ? '高尽责' : val > 40 ? '中等' : '随性自由';
+    else if (dim === 'Extraversion') label = val > 60 ? '高外向' : val > 40 ? '中等' : '内向安静';
+    else if (dim === 'Agreeableness') label = val > 60 ? '高宜人' : val > 40 ? '中等' : '独立自主';
+    return `<span style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.2rem 0.5rem;font-size:0.65rem;color:var(--dim)">${BF_LABELS[dim]} ${val}%（${label}）</span>`;
+  }).join('');
+
+  screen.innerHTML = `
+    <!-- 主卡片 -->
+    <div class="result-hero">
+      <span class="hero-badge" style="background:${rarity.gradient};color:#1a1008">${rarity.emoji} ${rarity.name}</span>
+      <div class="hero-dog">${dog.image ? '<img src="'+dog.image+'" style="width:120px;height:120px;object-fit:cover;border-radius:50%;box-shadow:0 4px 20px rgba(0,0,0,0.3)" />' : dog.emoji}</div>
+      <div class="hero-name">${dog.name}</div>
+      <div class="hero-rarity">
+        <div class="stars" style="color:${rarity.color}">${stars}</div>
+      </div>
+      <div class="hero-match">与该品种匹配度 ${matchPercent}%</div>
+      <div class="hero-traits">
+        ${dog.traits.map(t => `<span class="trait-tag">${t}</span>`).join('')}
+      </div>
+      <div class="hero-desc">${dog.description}</div>
+    </div>
+
+    <!-- BigFive五维 -->
+    <div class="bf-section">
+      <div class="section-title">Big Five 人格维度分析</div>
+      <div class="bf-grid">${bfBars}</div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:center;margin-top:0.8rem">
+        ${bfDesc}
+      </div>
+    </div>
+
+    <!-- 详细解读 -->
+    <div class="detail-section">
+      <div class="section-title">性格解析</div>
+      <div class="detail-row">
+        <div class="detail-icon">💪</div>
+        <div class="detail-content">
+          <div class="detail-label">核心优势</div>
+          <div class="detail-text">${dog.strength}</div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">⚡</div>
+        <div class="detail-content">
+          <div class="detail-label">潜在短板</div>
+          <div class="detail-text">${dog.weakness}</div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">🔮</div>
+        <div class="detail-content">
+          <div class="detail-label">人生关键词</div>
+          <div class="detail-text">${dog.keyword}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 品种匹配 -->
+    <div class="match-section">
+      <div class="section-title">品种匹配度</div>
+      <div class="match-grid">
+        ${secondDog ? `<div class="match-item"><div class="match-emoji">${secondDog.image ? '<img src="'+secondDog.image+'" style="width:48px;height:48px;object-fit:cover;border-radius:50%" />' : secondDog.emoji}</div><div class="match-label">最佳搭档</div><div class="match-name">${secondDog.name}</div></div>` : ''}
+        ${thirdDog ? `<div class="match-item"><div class="match-emoji">${thirdDog.image ? '<img src="'+thirdDog.image+'" style="width:48px;height:48px;object-fit:cover;border-radius:50%" />' : thirdDog.emoji}</div><div class="match-label">性格相近</div><div class="match-name">${thirdDog.name}</div></div>` : ''}
+      </div>
+    </div>
+
+    <!-- 广告位：顶部 -->
+    <div class="ad-container" id="adResultTop">
+      <div class="result-ad">
+        <div class="result-ad-label">广告</div>
+        <div class="result-ad-inner">
+          <div class="result-ad-text">38道题测出你的狗狗人格，朋友都在玩</div>
+          <div class="result-ad-btn" onclick="location.href='dog_quiz.html'">开始测试</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分享卡片 -->
+    <div class="share-section">
+      <div class="section-title" style="text-align:center;border-bottom:none;padding-bottom:0">🌟 分享你的狗狗人格</div>
+      <div class="share-card-wrap">
+        <div class="share-card" id="shareCard">
+          <div class="sc-bg" style="background:${rarity.gradient}">
+            <div class="sc-overlay">
+              <div class="sc-top">
+                <span class="sc-badge" style="background:rgba(0,0,0,0.3);color:#fff">🐕 狗品种测试</span>
+                <span class="sc-badge" style="background:rgba(0,0,0,0.3);color:#fff">${rarity.emoji} ${rarity.name}</span>
+              </div>
+              <div class="sc-dog">${dog.image ? '<img src="'+dog.image+'" style="width:100px;height:100px;object-fit:cover;border-radius:50%" />' : dog.emoji}</div>
+              <div class="sc-name" style="color:#fff">${dog.name}</div>
+              <div class="sc-rarity"><div class="sc-stars" style="color:rgba(255,255,255,0.9)">${stars}</div></div>
+              <div class="sc-match" style="color:rgba(255,255,255,0.7)">匹配度 ${matchPercent}%</div>
+              <div class="sc-traits">${dog.traits.map(t => `<span class="sc-trait">${t}</span>`).join('')}</div>
+              <div class="sc-desc">${(dog.description||'').substring(0, 80)}...</div>
+              <div class="sc-url">🔗 <span id="scQuizUrl">${(cfg && cfg.share && cfg.share.quizUrl) || 'https://www.fbti.net'}</span></div>
+              <div class="sc-footer">长按识别二维码 → 测测你的狗狗人格</div>
+            </div>
+          </div>
+        </div>
+        <div class="share-actions">
+          <button class="share-btn save" onclick="showAdOverlay('save')">📥 保存图片</button>
+          <button class="share-btn wechat" onclick="showAdOverlay('wechat')">💬 分享微信</button>
+          <button class="share-btn qr" onclick="showAdOverlay('qr')">📱 二维码</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 功能入口 -->
+    <div style="display:flex;gap:0.8rem;max-width:500px;margin:1.5rem auto;padding:0 1.5rem">
+      <button onclick="location.href='dog_quiz.html'" style="flex:1;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:0.8rem;display:flex;flex-direction:column;align-items:center;gap:0.3rem;cursor:pointer;color:var(--dim);font-size:0.75rem;transition:all 0.15s">
+        <span style="font-size:1.5rem">🔄</span>
+        <span>重新测试</span>
+      </button>
+      <button onclick="location.href='animal_quiz.html'" style="flex:1;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:0.8rem;display:flex;flex-direction:column;align-items:center;gap:0.3rem;cursor:pointer;color:var(--dim);font-size:0.75rem;transition:all 0.15s">
+        <span style="font-size:1.5rem">🐾</span>
+        <span>动物测试</span>
+      </button>
+    </div>
+
+    <!-- 分享广告弹出层 -->
+    <div id="adOverlay" class="ad-overlay">
+      <div class="ad-overlay-box">
+        <div class="ad-overlay-close" onclick="closeAdOverlay()">✕</div>
+        <div id="adOverlayContent"></div>
+      </div>
+    </div>
+
+    <!-- 私域引流 -->
+    <div class="traffic-section">
+      <div class="traffic-header">
+        <span class="traffic-icon">🔑</span>
+        <div class="traffic-title">解锁完整版狗狗分析</div>
+      </div>
+      <div class="traffic-entries">
+        <div class="traffic-entry">
+          <div class="entry-icon">📮</div>
+          <div class="entry-info">
+            <div class="entry-title">关注公众号</div>
+            <div class="entry-desc">回复【狗】获取完整性格报告</div>
+          </div>
+        </div>
+      </div>
+      <div class="traffic-benefit">
+        <div class="benefit-item">✓ 完整版狗狗人格分析</div>
+        <div class="benefit-item">✓ BigFive 五维度详细报告</div>
+        <div class="benefit-item">✓ 17种狗狗品种详解</div>
+      </div>
+    </div>
+
+    <!-- 广告位：底部 -->
+    <div class="ad-container" id="adResultBottom">
+      <div class="result-ad">
+        <div class="result-ad-label">广告</div>
+        <div class="result-ad-inner">
+          <div class="result-ad-text">测测你更像哪种狗？38道题揭秘真实性格</div>
+          <div class="result-ad-btn" onclick="location.href='dog_quiz.html'">重新测试</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      本测试仅供娱乐，请勿当真。<br>
+      © 狗品种性格测试 · BigFive 大五人格
+    </div>
+  `;
+
+  if (cfg.ads.enabled) {
+    const at = document.getElementById('adResultTop');
+    const ab = document.getElementById('adResultBottom');
+    const adHTML = '<div style="background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:1rem;text-align:center;color:var(--muted);font-size:0.8rem;">广告位</div>';
+    if (at) at.innerHTML = adHTML;
+    if (ab) ab.innerHTML = adHTML;
+  }
+}
+
+function showAdOverlay(type) {
+  const overlay = document.getElementById('adOverlay');
+  const content = document.getElementById('adOverlayContent');
+  const quizUrl = cfg.share ? cfg.share.quizUrl : 'https://www.fbti.net';
+
+  if (type === 'qr') {
+    content.innerHTML = `
+      <div class="ad-overlay-title">📱 分享到朋友圈</div>
+      <div class="ad-overlay-desc">长按识别二维码保存到相册</div>
+      <div class="ad-overlay-qr" id="qrTarget"></div>
+      <div class="ad-overlay-note">截图保存，发给朋友测试效果更好</div>
+    `;
+    overlay.classList.add('show');
+    setTimeout(function() {
+      var target = document.getElementById('qrTarget');
+      if (target && typeof QRCode !== 'undefined') { target.innerHTML = ''; new QRCode(target, { text: quizUrl, width: 160, height: 160, colorDark: "#000000", colorLight: "#ffffff" }); }
+    }, 50);
+  } else if (type === 'save') {
+    content.innerHTML = `
+      <div class="ad-overlay-title">📥 保存图片</div>
+      <div class="ad-overlay-desc">生成你的专属分享图</div>
+      <button class="ad-overlay-btn" onclick="closeAdOverlay();downloadCard()">立即生成并保存</button>
+    `;
+    overlay.classList.add('show');
+  } else if (type === 'wechat') {
+    content.innerHTML = `
+      <div class="ad-overlay-title">💬 分享给好友</div>
+      <div class="ad-overlay-desc">复制链接发给好友</div>
+      <div class="ad-overlay-url" id="shareUrlText">${quizUrl}</div>
+      <button class="ad-overlay-btn" onclick="copyShareUrl()">📋 复制链接</button>
+      <div style="margin-top:0.8rem">
+        <div class="ad-overlay-qr" id="qrTarget2"></div>
+      </div>
+      <div class="ad-overlay-note">长按二维码保存图片发朋友圈</div>
+    `;
+    overlay.classList.add('show');
+    setTimeout(function() {
+      var target = document.getElementById('qrTarget2');
+      if (target && typeof QRCode !== 'undefined') { target.innerHTML = ''; new QRCode(target, { text: quizUrl, width: 140, height: 140, colorDark: "#000000", colorLight: "#ffffff" }); }
+    }, 50);
+  }
+}
+
+function closeAdOverlay() {
+  document.getElementById('adOverlay').classList.remove('show');
+}
+
+function copyShareUrl() {
+  var url = cfg.share ? cfg.share.quizUrl : 'https://www.fbti.net';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      alert('链接已复制！');
+    }).catch(function() {
+      prompt('链接：', url);
+    });
+  } else {
+    prompt('链接（Ctrl+C复制）：', url);
+  }
+}
+
+function downloadCard() {
+  const card = document.getElementById('shareCard');
+  if (!card) return;
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(card, { scale: 2, backgroundColor: null }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = '我的狗狗人格_' + (window._dogResult && window._dogResult.dog ? window._dogResult.dog.name : '测试') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  } else {
+    alert('截图功能已就绪，长按卡片可直接保存');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    var result = getResultFromURL();
+    window._dogResult = result;
+    document.getElementById('resultScreen').innerHTML = '<div style="color:#fff;padding:2rem;text-align:center;font-size:1.2rem">正在加载结果...</div>';
+    renderResult(result);
+  } catch(e) {
+    console.error('Result error:', e);
+    document.getElementById('resultScreen').innerHTML = '<div style="color:#fff;padding:2rem;text-align:center;font-size:1.2rem">加载失败：' + e.message + '</div>';
+  }
+});
+</script>
+</body>
+</html>

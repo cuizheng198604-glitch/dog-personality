@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>狗品种性格测试</title>
+<style>
+:root{--bg:#1a1008;--panel:#2d1a0a;--card:#3d2510;--border:#5a3a1a;--text:#f5e8d0;--muted:#a08060;--dim:#c0a080;--primary:#f59e0b;--accent:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;outline:none}
+body{font-family:Segoe UI,PingFang SC,Microsoft YaHei,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── 封面 ── */
+#startScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.start-card{background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:2.5rem 2rem;max-width:520px;width:100%;text-align:center;animation:fadeUp 0.6s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.start-emoji{font-size:4rem;margin-bottom:1rem}
+.start-title{font-size:1.9rem;font-weight:900;background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.4rem}
+.start-subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem}
+.start-desc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:left;color:var(--dim);font-size:0.82rem;line-height:1.9;margin-bottom:1.5rem}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.5rem;text-align:left}
+.info-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem}
+.info-n{font-size:0.68rem;color:var(--muted);margin-bottom:0.15rem}
+.info-v{font-size:0.88rem;font-weight:700;color:var(--primary)}
+.btn-group{display:flex;flex-direction:column;gap:0.6rem}
+.btn-start{background:linear-gradient(135deg,#f59e0b,#fbbf24);border:none;border-radius:12px;color:#1a1008;font-size:1rem;font-weight:800;cursor:pointer;padding:0.85rem 2rem;letter-spacing:0.03em;transition:opacity 0.2s,transform 0.1s;box-shadow:0 4px 20px rgba(245,158,11,0.3)}
+.btn-start:hover{opacity:0.9}
+.btn-start:active{transform:scale(0.97)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:0.6rem 2rem;font-size:0.85rem;cursor:pointer;transition:all 0.15s}
+.btn-ghost:hover{background:var(--card);color:var(--text)}
+
+/* ── 答题页 ── */
+#quizScreen{display:none;min-height:100vh}
+.quiz-header{background:linear-gradient(135deg,#2d1a0a,#3d2510);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:10}
+.qh-left{display:flex;align-items:center;gap:0.8rem}
+.qh-badge{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--primary);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.68rem;font-weight:700}
+.qh-title{font-size:0.82rem;font-weight:700;color:var(--muted)}
+.progress-wrap{flex:1;max-width:400px}
+.pg-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.pg-fill{height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:3px;transition:width 0.4s}
+.pg-text{font-size:0.68rem;color:var(--muted);text-align:right;margin-top:0.18rem}
+.quiz-body{padding:1.8rem 1.5rem;max-width:700px;margin:0 auto}
+.q-block{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1rem;animation:fadeIn 0.3s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.q-meta{font-size:0.68rem;color:var(--muted);margin-bottom:0.6rem;letter-spacing:0.05em}
+.q-text{font-size:0.98rem;color:var(--text);line-height:1.75;margin-bottom:1.1rem;font-weight:600}
+.q-opts{display:flex;flex-direction:column;gap:0.5rem}
+.q-opt{display:flex;align-items:center;gap:0.8rem;padding:0.7rem 1rem;border:1px solid var(--border);background:var(--card);border-radius:10px;color:var(--dim);font-size:0.88rem;cursor:pointer;transition:all 0.15s;user-select:none}
+.q-opt:hover{border-color:var(--primary);color:var(--text);background:rgba(245,158,11,0.05)}
+.q-opt.selected{border-color:var(--primary);background:rgba(245,158,11,0.12);color:var(--primary);font-weight:600}
+.q-opt .ol{font-size:1.1rem;font-weight:800;flex-shrink:0;width:28px;text-align:center;opacity:0.6}
+.q-opt.selected .ol{opacity:1}
+.nav-row{display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)}
+.btn-next{padding:0.65rem 2.2rem;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:none;border-radius:10px;color:#1a1008;font-size:0.9rem;font-weight:800;cursor:pointer;transition:opacity 0.2s;box-shadow:0 2px 12px rgba(245,158,11,0.2)}
+.btn-next:hover{opacity:0.88}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed}
+.btn-back{padding:0.65rem 1.2rem;background:#3d2510;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:0.9rem;cursor:pointer;transition:all 0.15s}
+.btn-back:hover{background:#5a3a1a;color:var(--text)}
+
+/* ── 加载页 ── */
+#loadingScreen{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.loading-emoji{font-size:3rem;animation:bounce 1s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.loading-text{color:var(--muted);font-size:0.9rem;margin-top:1rem;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ── 广告 ── */
+.ad-container{margin:0.5rem auto;max-width:700px}
+.quiz-ad{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.8rem;display:flex;align-items:center;gap:0.8rem;margin:0.5rem 0}
+.quiz-ad-label{background:rgba(245,158,11,0.1);color:var(--primary);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.65rem;font-weight:700;flex-shrink:0}
+.quiz-ad-content{display:flex;align-items:center;gap:0.8rem;flex:1}
+.quiz-ad-text{font-size:0.78rem;color:var(--dim);flex:1;text-align:left}
+.quiz-ad-qr{background:#fff;border-radius:6px;padding:4px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div id="startScreen">
+  <div class="start-card">
+    <div class="start-emoji">🐕</div>
+    <h1 class="start-title">狗品种性格测试</h1>
+    <p class="start-subtitle">基于Big Five大五人格理论</p>
+    <div class="start-desc">
+      基于心理学经典的 <strong>Big Five 大五人格</strong> 模型，深度分析你的性格特质。<br><br>
+      不同狗品种有不同的性格——<strong>金毛的温暖、边牧的智慧、柴犬的傲娇</strong>。<br>
+      38道题，找出你最像的狗狗品种。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="info-n">题目数</div><div class="info-v">38题</div></div>
+      <div class="info-item"><div class="info-n">预计用时</div><div class="info-v">5-8分钟</div></div>
+      <div class="info-item"><div class="info-n">结果类型</div><div class="info-v">17种狗狗</div></div>
+      <div class="info-item"><div class="info-n">稀有度</div><div class="info-v">4级掉落</div></div>
+    </div>
+    <div class="btn-group">
+      <button class="btn-start" onclick="startQuiz()">🐕 开始测试</button>
+      <button class="btn-ghost" onclick="startQuiz()">好奇试试</button>
+    </div>
+  </div>
+</div>
+
+<!-- 答题页 -->
+<div id="quizScreen">
+  <div class="quiz-header">
+    <div class="qh-left">
+      <span class="qh-badge">Big5</span>
+      <span class="qh-title">🐕 狗品种性格测试</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="pg-bar"><div class="pg-fill" id="pgFill" style="width:0%"></div></div>
+      <div class="pg-text" id="pgText">0 / 38</div>
+    </div>
+    <button class="btn-back" onclick="confirmExit()">退出</button>
+  </div>
+  <div class="quiz-body" id="quizBody"></div>
+</div>
+
+<!-- 加载页 -->
+<div id="loadingScreen">
+  <div class="loading-emoji">🐕</div>
+  <div class="loading-text">正在分析你的狗狗人格...</div>
+</div>
+
+<script src="dog_config.js"></script>
+<script>
+const cfg = DOG_CONFIG;
+const QUESTIONS = cfg.questions;
+const BF_DIMS = cfg.bf_dims;
+
+let currentQ = 0;
+let answers = {};
+const total = QUESTIONS.length;
+
+function startQuiz() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  showQuestion(0);
+}
+
+function showQuestion(index) {
+  currentQ = index;
+  const q = QUESTIONS[index];
+  const body = document.getElementById('quizBody');
+
+  document.getElementById('pgFill').style.width = ((index + 1) / total * 100) + '%';
+  document.getElementById('pgText').textContent = `${index + 1} / ${total}`;
+
+  body.innerHTML = `
+    <div class="q-block">
+      <div class="q-meta">${q.section} · 第${index + 1}题</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-opts">
+        ${q.opts.map((o, i) => `
+          <div class="q-opt" onclick="selectOpt(${i}, ${o.s})">
+            <span class="ol">${o.l}</span>
+            <span>${o.t}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="ad-container" id="qAdContainer"></div>
+    <div class="nav-row">
+      ${index > 0 ? '<button class="btn-back" onclick="prevQ()">上一题</button>' : ''}
+      <button class="btn-next" id="nextBtn" onclick="nextQ()" disabled>${index === total - 1 ? '🔮 查看结果' : '下一题 →'}</button>
+    </div>
+  `;
+
+  if (answers[index] !== undefined) {
+    const saved = answers[index].score;
+    const opts = document.querySelectorAll('.q-opt');
+    opts.forEach((opt, i) => {
+      if (q.opts[i].s === saved) opt.classList.add('selected');
+    });
+    document.getElementById('nextBtn').disabled = false;
+  }
+}
+
+function selectOpt(index, score) {
+  answers[currentQ] = { score, index };
+  const opts = document.querySelectorAll('.q-opt');
+  opts.forEach((o, i) => o.classList.toggle('selected', i === index));
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  if (currentQ < total - 1) showQuestion(currentQ + 1);
+  else showResult();
+}
+
+function prevQ() {
+  if (currentQ > 0) showQuestion(currentQ - 1);
+}
+
+function confirmExit() {
+  if (confirm('确定退出吗？进度将不会保存。')) {
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('startScreen').style.display = 'flex';
+  }
+}
+
+// ══════════════════════════════════════
+//  计分引擎：BigFive → 狗品种
+// ══════════════════════════════════════
+function calcResult() {
+  const bf_scores  = { Openness:0, Conscientiousness:0, Extraversion:0, Agreeableness:0, Neuroticism:0 };
+  const bf_counts  = { Openness:0, Conscientiousness:0, Extraversion:0, Agreeableness:0, Neuroticism:0 };
+
+  QUESTIONS.forEach((q, qi) => {
+    const ans = answers[qi];
+    if (!ans) return;
+    const s = ans.score;
+    bf_scores[q.dim] += s;
+    bf_counts[q.dim]++;
+  });
+
+  // 算百分比
+  const bf_pct = {};
+  BF_DIMS.forEach(d => {
+    bf_pct[d] = bf_counts[d] > 0 ? Math.round((bf_scores[d] / (bf_counts[d] * 5)) * 100) : 50;
+  });
+
+  // 用BigFive五维找最匹配的狗
+  let bestDog = null;
+  let bestSimilarity = -1;
+
+  cfg.dogs.forEach(dog => {
+    const p = dog.profile;
+    let sim = 0;
+    BF_DIMS.forEach(d => {
+      const diff = Math.abs(bf_pct[d] - (p[d] || 50));
+      sim += (100 - diff);
+    });
+    sim = sim / BF_DIMS.length;
+    if (sim > bestSimilarity) {
+      bestSimilarity = sim;
+      bestDog = dog;
+    }
+  });
+
+  // 找次要匹配
+  const sorted = cfg.dogs.map(d => {
+    const p = d.profile;
+    let sim = 0;
+    BF_DIMS.forEach(dim => { sim += (100 - Math.abs(bf_pct[dim] - (p[dim]||50))); });
+    return { dog: d, sim: sim / BF_DIMS.length };
+  }).sort((a,b) => b.sim - a.sim);
+
+  return {
+    dogId: bestDog.id,
+    dog: bestDog,
+    matchPercent: Math.round(bestSimilarity),
+    rarity: cfg.rarities[bestDog.rarity],
+    bfScores: bf_pct,
+    secondDog: sorted[1] ? sorted[1].dog : null,
+    thirdDog: sorted[2] ? sorted[2].dog : null,
+    allDimensions: bf_pct
+  };
+}
+
+function showResult() {
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('loadingScreen').style.display = 'flex';
+
+  setTimeout(() => {
+    const result = calcResult();
+
+    // 提交到后端
+    fetch('/api/dog-results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result)
+    }).catch(() => {});
+
+    try { sessionStorage.setItem('dog_result', JSON.stringify(result)); } catch(e) {}
+    try { localStorage.setItem('dog_last_result', JSON.stringify(result)); } catch(e) {}
+    window.location.href = 'dog_result.html';
+  }, 1800);
+}
+</script>
+</body>
+</html>
